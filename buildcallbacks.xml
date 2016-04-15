@@ -1,0 +1,483 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!--
+ [y] hybris Platform
+
+ Copyright (c) 2000-2015 hybris AG
+ All rights reserved.
+
+ This software is the confidential and proprietary information of hybris
+ ("Confidential Information"). You shall not disclose such Confidential
+ Information and shall use it only in accordance with the terms of the
+ license agreement you entered into with hybris.
+
+  
+--><!--
+ All hybris buildcallbacks.xml macrodefinitions:
+ 
+ Build/Documentation
+ 
+	 before/after ant macro "clean"
+		 <macrodef name="excelsiorjsaddon_before_clean"/>
+		 <macrodef name="excelsiorjsaddon_after_clean"/>
+	 
+	 before/after ant macro "build"
+		 <macrodef name="excelsiorjsaddon_before_build"/>
+		 <macrodef name="excelsiorjsaddon_after_build"/>
+		 
+	 before/after ant macro "compile_core" - the core module of the extension
+		 <macrodef name="excelsiorjsaddon_before_compile_core">
+		 <macrodef name="excelsiorjsaddon_after_compile_core">
+	 
+	 before/after ant macro "compile_web" - the web module of the extension
+		 <macrodef name="excelsiorjsaddon_before_compile_web" />
+		 <macrodef name="excelsiorjsaddon_after_compile_web" />
+	 
+	 before/after ant macro "compile_hmc" - the hmc module of the extension
+		 <macrodef name="excelsiorjsaddon_before_compile_hmc" />
+		 <macrodef name="excelsiorjsaddon_after_compile_hmc" />
+ 
+ Preparing extension
+ 
+	 will be called in the beginning of the ant call and only once (also when using multiple 
+	 ant targets e.g. ant build yunittest)	
+		 <macrodef name="excelsiorjsaddon_only_once_prepare"/>
+ 
+ Creating ear module/production
+ 
+	 before/after ant macro "ear"
+		 <macrodef name="excelsiorjsaddon_before_ear"/>
+		 <macrodef name="excelsiorjsaddon_after_ear"/>
+
+	 before/after ant macro "production" - for hybris server only
+		 <macrodef name="excelsiorjsaddon_before_production" />
+		 <macrodef name="excelsiorjsaddon_after_production" />
+ 
+ JUnit Test
+ 
+	 before/after ant macro "yunitinit" 
+		 <macrodef name="excelsiorjsaddon_before_yunitinit" />
+		 <macrodef name="excelsiorjsaddon_after_yunitinit" />
+	 
+	 before/after ant macro "yunit"
+		 <macrodef name="excelsiorjsaddon_before_yunit" />
+		 <macrodef name="excelsiorjsaddon_after_yunit" /> 
+		 
+ Distribution package
+ 
+ 	 before/after ant macro "dist" - internal target; only for use when platform is available in source code
+		 <macrodef name="excelsiorjsaddon_after_dist"/>
+		 <macrodef name="excelsiorjsaddon_before_dist"/>
+	 
+	 before/after ant macro "dist_copy" - internal target; only for use when platform is available in source code
+		 <macrodef name="excelsiorjsaddon_before_dist_copy"/>
+		 <macrodef name="excelsiorjsaddon_after_dist_copy"/>
+ 
+--><project name="excelsiorjsaddon_buildcallbacks">
+
+		
+		<property name="excelsior.home" value="${basedir}/../custom/excelsiorjsaddon"></property>
+		<property name="excelsior.version.basedir" value="${excelsior.home}/resources/versions"></property>
+		<property name="excelsior.impex.dir" value="${excelsior.home}/resources/impex"></property>
+
+		<target name="greeting">
+			<echo message="---------------------------------------------------------------" />
+			<echo message="Excelsior Addon configuration tool" />
+			<echo message="---------------------------------------------------------------" />
+		</target>
+
+		<if>
+			<not>
+				<contains string="${basedir}" substring="platform"/>
+			</not>
+			<then>
+				<echo message="${platformhome}" /> 
+				<fail message="you need to run the ant inside of your platformhome folder"/>
+			</then>
+		</if>
+
+		<script language="javascript"><![CDATA[
+				var version = project.getProperty('version');
+
+				// for testing purpose
+				//version = "5.8";
+
+
+				if (version < "5.2") {
+					project.setProperty('excelsior.version.current', project.getProperty('excelsior.version.basedir')+"/5.1");
+					project.setProperty('excelsior.version.common', project.getProperty('excelsior.version.basedir')+"/5.5.1");
+					project.setProperty('excelsior.version', "5.1");
+				} else if (version >= "5.2" && version < "5.8") {
+					project.setProperty('excelsior.version.current', project.getProperty('excelsior.version.basedir')+"/5.5.1");
+					project.setProperty('excelsior.version.common', project.getProperty('excelsior.version.basedir')+"/5.5.1");
+					project.setProperty('excelsior.version', "version");
+				} else {
+					project.setProperty('excelsior.error.mssage', "You hybris version is equals or higher than 5.8 which currently not supported yet!");
+				}
+		  ]]></script>
+
+		<if>
+			<isset property="excelsior.error.mssage"/>
+			<then>
+				<fail message="${excelsior.error.mssage}"/>
+			</then>
+		</if>
+
+				
+
+		<target name="excelsior.impex.init">
+
+			<delete dir="${excelsior.impex.dir}"/>
+			<mkdir dir="${excelsior.impex.dir}"/>
+			
+		</target>
+
+
+<!--
+
+	configuration for impex
+
+-->
+		<target name="excelsior.filemanager" depends="excelsior.impex.init,excelsior.config.b2c,excelsior.config.b2b">
+
+			<if>
+				<equals arg1="${excelsior.b2c}" arg2="on" />
+				<then>
+					<if>
+						<equals arg1="${excelsior.version}" arg2="5.1" />
+						<then>
+							<copy file="${excelsior.version.current}/impex/${excelsior.b2c.impex.template}" todir="${excelsior.impex.dir}"/>
+						</then>
+						<else>
+							<if>
+								<equals arg1="${excelsior.b2c.hybrissite}" arg2="telco" />
+								<then>
+									<copy file="${excelsior.version.common}/impex/${excelsior.b2c.telco.impex.template}" tofile="${excelsior.impex.dir}/${excelsior.b2c.impex.template}"/>
+								</then>
+								<else>
+									<copy file="${excelsior.version.common}/impex/${excelsior.b2c.impex.template}" todir="${excelsior.impex.dir}"/>
+								</else>
+							</if>
+						</else>
+					</if>
+					<replaceregexp file="${excelsior.impex.dir}/${excelsior.b2c.impex.template}" match="(\$community_site=).*" replace="\1 " />
+					<replaceregexp file="${excelsior.impex.dir}/${excelsior.b2c.impex.template}" match="(\$community_slug=).*" replace="\1 " />
+					<replaceregexp file="${excelsior.impex.dir}/${excelsior.b2c.impex.template}" match="(\$hybris_prodCode=).*" replace="\1 " />
+				</then>
+			</if>
+
+			<if>
+				<equals arg1="${excelsior.b2b}" arg2="on" />
+				<then>
+					<copy file="${excelsior.version.common}/impex/${excelsior.b2b.impex.template}" todir="${excelsior.impex.dir}"/>
+					<replaceregexp file="${excelsior.impex.dir}/${excelsior.b2b.impex.template}" match="(\$community_site=).*" replace="\1 " />
+					<replaceregexp file="${excelsior.impex.dir}/${excelsior.b2b.impex.template}" match="(\$community_slug=).*" replace="\1 " />
+					<replaceregexp file="${excelsior.impex.dir}/${excelsior.b2b.impex.template}" match="(\$hybris_prodCode=).*" replace="\1 " />
+				</then>
+			</if>
+
+			<if>
+				<equals arg1="${excelsior.b2c.hybrissite}" arg2="telco" />
+				<then>
+					<loadproperties srcfile="${excelsior.version.common}/src/b2ctelco/b2ctelco.properties" prefix="jamcommunity."/>
+
+					<propertyselector property="copyfile.list"
+		                        delimiter=","
+		                        match="jamcommunity.copy.(.*java|.*xml|.*jsp|.*tag)"
+		                        select="\1"
+		                        casesensitive="false" />
+		      
+					<for list="${copyfile.list}" param="copyfile">
+						<sequential>
+							<echo message="${line.separator}copy file ${excelsior.version.current}/src/@{copyfile} to ${excelsior.home}/${jamcommunity.copy.@{copyfile}}" />
+							<!-- <exec executable="ls">
+						    <arg value="${excelsior.home}/${jamcommunity.@{copyfile}}"/>
+						  </exec> -->
+							<copy file="${excelsior.version.current}/src/@{copyfile}" todir="${excelsior.home}/${jamcommunity.copy.@{copyfile}}" overwrite="true"/>
+						</sequential>	
+					</for>
+
+					<propertyselector property="deletefile.list"
+		                        delimiter=","
+		                        match="jamcommunity.delete.(.*java|.*xml|.*jsp|.*tag)"
+		                        select="\1"
+		                        casesensitive="false" />
+
+					<for list="${deletefile.list}" param="deletefile">
+						<sequential>
+							<if>
+								<available file="${excelsior.home}/${jamcommunity.delete.@{deletefile}}/@{deletefile}"/>
+								<then>
+									<echo message="${line.separator}delete file from ${excelsior.home}/${jamcommunity.delete.@{deletefile}}/@{deletefile}" />
+									<delete file="${excelsior.home}/${jamcommunity.delete.@{deletefile}}/@{deletefile}"/>
+								</then>
+								<else>
+									<echo message="${line.separator}file ${excelsior.home}/${jamcommunity.delete.@{deletefile}}/@{deletefile} not exists, skip deletion" />
+								</else>
+							</if>
+						</sequential>	
+					</for>
+				</then>
+			</if>
+			<if>
+				<equals arg1="${excelsior.version}" arg2="5.1" />
+				<then>
+					<loadproperties srcfile="${excelsior.version.basedir}/5.1/excelsior.properties" prefix="jamcommunity."/>
+
+					<propertyselector property="copyfile.list"
+		                        delimiter=","
+		                        match="jamcommunity.copy.(.*java|.*xml|.*jsp|.*tag)"
+		                        select="\1"
+		                        casesensitive="false" />
+		      
+					<for list="${copyfile.list}" param="copyfile">
+						<sequential>
+							<echo message="${line.separator}copy file ${excelsior.version.current}/src/@{copyfile} to ${excelsior.home}/${jamcommunity.copy.@{copyfile}}" />
+							<!-- <exec executable="ls">
+						    <arg value="${excelsior.home}/${jamcommunity.@{copyfile}}"/>
+						  </exec> -->
+							<copy file="${excelsior.version.current}/src/@{copyfile}" todir="${excelsior.home}/${jamcommunity.copy.@{copyfile}}" overwrite="true"/>
+						</sequential>	
+					</for>
+
+					<propertyselector property="deletefile.list"
+		                        delimiter=","
+		                        match="jamcommunity.delete.(.*java|.*xml|.*jsp|.*tag)"
+		                        select="\1"
+		                        casesensitive="false" />
+
+					<for list="${deletefile.list}" param="deletefile">
+						<sequential>
+							<if>
+								<available file="${excelsior.home}/${jamcommunity.delete.@{deletefile}}/@{deletefile}"/>
+								<then>
+									<echo message="${line.separator}delete file from ${excelsior.home}/${jamcommunity.delete.@{deletefile}}/@{deletefile}" />
+									<delete file="${excelsior.home}/${jamcommunity.delete.@{deletefile}}/@{deletefile}"/>
+								</then>
+								<else>
+									<echo message="${line.separator}file ${excelsior.home}/${jamcommunity.delete.@{deletefile}}/@{deletefile} not exists, skip deletion" />
+								</else>
+							</if>
+						</sequential>	
+					</for>
+				</then>
+			</if>
+		</target>
+		
+
+
+
+<!--
+#################################
+	
+	configuration for b2c
+
+#################################
+-->
+
+		<target name="excelsior.config.b2c">
+			<if>
+				<not>
+					<isset property="excelsior.b2c"/>
+				</not>
+				<then>
+					<input addproperty="excelsior.b2c" defaultvalue="off" validargs="on,off"> 
+**** b2c configuration **** 
+
+WARNING: property excelsior.b2c was not found
+
+Would you like to configure for b2c? 
+Press [Enter] to use the default value</input>
+				</then>
+			</if>
+
+			<if>
+				<equals arg1="${excelsior.b2c}" arg2="on"/>
+				<then>
+					<if>
+						<not>
+							<isset property="excelsior.b2c.hybrissite"/>
+						</not>
+						<then>
+							<input addproperty="excelsior.b2c.hybrissite" defaultvalue="electronics">
+**** b2c configuration **** 
+
+WARNING: property excelsior.b2c.hybrissite was not found
+
+Please specify the hybris site you'd like to point to. 
+Press [Enter] to use the default value</input>
+						</then>
+					</if>
+
+					<property name="excelsior.b2c.impex.template" value="projectdataExcelsior-b2c.impex" />
+					<property name="excelsior.b2c.telco.impex.template" value="projectdataExcelsior-telco.impex" />
+				</then>
+			</if>
+		</target>
+
+		
+<!--
+#################################
+	
+	configuration for b2b
+	
+#################################
+-->
+
+
+		<target name="excelsior.config.b2b">
+			<if>
+				<and>
+					<not>
+						<equals arg1="${excelsior.version}" arg2="5.1" />
+					</not>
+					<not>
+						<isset property="excelsior.b2b"/>
+					</not>
+				</and>
+				<then>
+					<input addproperty="excelsior.b2b" defaultvalue="off" validargs="on,off"> 
+**** b2b configuration **** 
+
+WARNING: property excelsior.b2b was not found
+
+Would you like to configure for b2b? 
+Press [Enter] to use the default value</input>
+				</then>
+			</if>
+			
+			<if>
+				<equals arg1="${excelsior.b2b}" arg2="on"/>
+				<then>
+					<property name="excelsior.b2b.impex.template" value="projectdataExcelsior-b2b.impex" />
+				</then>
+			</if>
+		</target>
+
+<!--
+####################################################
+	
+	configuration for local properties file location
+	
+####################################################
+-->
+
+		<target name="excelsior.properties.path">
+				<if>
+					<not>
+						<isset property="excelsior.properties.path"/>
+					</not>
+					<then>
+					<input addproperty="excelsior.properties.path"> 
+**** Configuration Wizard **** 
+
+WARNING: property excelsior.properties.path was not found
+
+Please provide the absolute path of your properties file
+					</input>
+					</then>
+				</if>
+		</target>
+
+
+		<target name="excelsior" depends="greeting,excelsior.filemanager,excelsior.properties.path">
+			
+			<if>
+				<isset property="excelsior.properties.path"/>
+				<then>
+					<loadproperties srcfile="${excelsior.properties.path}" prefix="localprop."/>
+				  <propertyselector property="excelsiorjsaddon.local.properties"
+		                        delimiter=","
+		                        match="localprop\.(.*)"
+		                        select="\1"
+		                        casesensitive="false" />
+
+		      <loadproperties srcfile="${excelsior.home}/project.properties" prefix="addonprop."/>
+					<propertyselector property="excelsiorjsaddon.origin.properties"
+		                        delimiter=","
+		                        match="addonprop\.(.*)"
+		                        select="\1"
+		                        casesensitive="false" />
+
+					<for list="${excelsiorjsaddon.local.properties}" param="localproperty">
+						<sequential>
+							<var name="in-list" value="false"/>
+							<for list="${excelsiorjsaddon.origin.properties}" param="addonproperty">
+								<sequential>
+									<if>
+										<equals arg1="@{localproperty}" arg2="@{addonproperty}"/>
+										<then>
+											<replaceregexp file="${excelsior.home}/project.properties" flags="g" byline="true" match="^(?!#)@{localproperty}=.*" replace="@{localproperty}=${localprop.@{localproperty}}" />
+											<var name="in-list" unset="true"/>
+											<var name="in-list" value="true"/>
+										</then>
+								  </if>
+								</sequential>
+							</for>
+							<if>
+								<equals arg1="${in-list}" arg2="false"/>
+								<then>
+									<echo message="@{localproperty}=${localprop.@{localproperty}}${line.separator}" file="${excelsior.home}/project.properties" append="true" />
+								</then>
+							</if>
+						</sequential>
+					</for>
+				</then>
+			</if>
+
+			<if>
+				<or>
+					<equals arg1="${excelsior.b2c}" arg2="on"/>
+					<equals arg1="${excelsior.b2b}" arg2="on"/>
+				</or>
+				<then>
+					<echo message="CONFIGURATION COMPLETED, PLEASE RUN UPDATE IN HMC TO GET THE IMPEX TAKING PLACE!"/>		
+				</then>
+				<else>
+					<echo message="NOTHING CHANGED!"/>
+				</else>
+			</if>
+		
+		</target>
+
+		<target name="excelsior.help">
+
+			<echo message="" />
+			<echo message="------------------------" />
+			<echo message="B2C PARAMETERS         |"/>
+			<echo message="------------------------" />
+			<echo message="" />
+
+			<echo message="-Dexcelsior.b2c                   Turn on or off for hybris b2c. By default is on. commandline usage: ant excelsior -Dexcelsior.b2c=on/off"/>
+			<echo message="-Dexcelsior.b2c.hybrissite                   Specify hybris site url. By default is electronics. commandline usage: ant excelsior -Dexcelsior.b2c.hybrissite=electronics"/>
+			
+			<echo message="" />
+			<echo message="------------------------" />
+			<echo message="B2B PARAMETERS         |"/>
+			<echo message="------------------------" />
+			<echo message="" />
+		  
+		  <echo message="-Dexcelsior.b2b                   Turn on or off for hybris b2b. By default is on. commandline usage: ant excelsior -Dexcelsior.b2b=on/off"/>
+		  
+			<echo message="" />
+			<echo message="------------------------" />
+			<echo message="PROPERTIES PATH        |"/>
+			<echo message="------------------------" />
+			<echo message="" />
+
+		  <echo message="-Dexcelsior.properties.path        Specify the absolute path of properties file which will replace the origin property exists in addon."/>
+
+		</target>
+	<!-- 
+	    Called whenever 'ant ear' is used. this callback can be used to modify the content of the ear file
+	
+	     ${ear.path}: 			path to ear
+	 -->
+	<macrodef name="excelsiorjsaddon_before_ear">
+		<sequential>
+
+			<!-- you can do anything before the EAR file is being packed -->
+			
+		</sequential>
+	</macrodef>
+		
+</project>

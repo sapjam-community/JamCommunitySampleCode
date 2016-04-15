@@ -1,0 +1,233 @@
+.excelsior-homepage .excelsior-loading{
+    height:160px;
+    width: 100%;
+    background:url('../image/home-ph.png') no-repeat center center; 
+    background-size: contain;
+}
+
+.excelsior-detailpage .excelsior-loading{
+    height: 160px;
+    width: 100%;
+    background:url('../image/product-ph.png') no-repeat center center; 
+    background-size: contain;
+}
+
+.excelsior-loading {
+  background:url('../image/placeholder.png') no-repeat center center;
+  display:block;
+/*  -webkit-transition: background-color 0;
+  transition: background-color 0;*/
+}
+
+.excelsior-loading * {
+  opacity: 0;
+  -webkit-transition: opacity 1s ease-in;
+  transition: opacity 1s ease-in;
+}
+
+.e-post-prodImg .e-img-prodImg{
+	width: 48px;
+	height: 48px;
+}
+
+.e-post-homepage .e-avatar{
+	width:32px;
+}
+
+
+#Excelsior-Controller-SimpleReview-ex-panel-review .e-panel-header,
+#Excelsior-Controller-SimpleQuestion-ex-panel-question .e-panel-header{
+	height:auto;
+}
+
+#Excelsior-Controller-SimpleReview-ex-panel-review .label-right,
+#Excelsior-Controller-SimpleQuestion-ex-panel-question .label-right{
+	top:4px;
+}
+
+@media screen and (max-width: 390px){
+	.e-post-feedback span:nth-child(2){
+		display: block;
+	}
+}
+
+#ex-panel-review,
+#ex-panel-question {
+  width: 96%;
+  margin: 0 auto;
+}
+
+/*mobile search page*/
+.ex-desktop, .ex-responsive{
+  display:none;
+}
+.ex-content-2{
+  display: none;
+}
+#ex-searchResult .e-post-avatar{
+  width:auto;
+}
+#ex-searchResult .e-post-count .e-icon-comment {
+  margin-left: 5px;
+}
+#ex-searchResult .e-post-searched{
+  padding-right: 70px;
+}
+#ex-searchResult .ui-btn-text{
+  font-weight: bold;
+}
+#ex-refinement-content .ui-btn-inner{
+  padding: 0.7em 40px 0.7em 5px;
+}
+#ex-searchResult .cols{
+  margin-left: 5px;
+}
+#ex-searchResult .ui-btn{
+  margin-top: 0px;
+}
+
+#communityRefinement-page{
+  z-index: -1;
+  min-height: 100%;
+  padding-top: 41px; 
+  padding-bottom: 43px; 
+}
+#communityRefinement-page .ui-bar{
+  padding:0px;
+}
+#ex-refinement-content{
+  display: block !important;
+}
+#ex-refinement-content .ui-btn-text{
+  font-size: 16px;
+  display:inline-block;
+  width:100%;
+}
+.community-secondary-refinement p{
+  border: 1px dotted #d1d1d1;
+  padding:5px 0px 5px 18px;
+  border-bottom-width: 0px;
+}
+.community-secondary-refinement{
+  font-size: 12px;
+  font-weight: normal;
+}
+.parentRefinementMobile{
+  vertical-align: text-bottom;
+}
+.childRefinementMobile{
+  vertical-align: baseline;
+}
+#communityRefinement-page .ui-footer{
+  text-align: center;
+}
+.ex-mobile .pagination{
+  margin-top: -10px;
+}
+.ex-mobile .pagination .ui-block-a{
+  margin-top: 11px;
+}
+/*mobile search page end*/
+
+/* product-list
+   added by Ricky on 2015.11.17
+ */
+
+.ex-prodListPage {
+  line-height: 1.5;
+}
+
+.e-panel-header.e-product-list-panel {
+    border: 0;
+    margin: 0;
+    padding: 0;
+}
+
+.e-product-list-panel .e-list-summary,
+.e-product-list-panel .label-right {
+  position: static;
+}
+
+@media screen 
+and (min-device-width : 320px) 
+and (max-device-width : 480px) {
+  .e-list-review-count,
+  .e-list-question-count {
+    display: block;
+  }
+
+  .e-list-separator {
+    display: none;
+  }
+
+  .excelsior-toolbar {
+    padding: 0;
+  }
+
+  .e-list {
+    margin: 0 0 0 -12px;
+  }
+
+  .col.e-post-avatar {
+    width: 100px;
+  }
+
+  .col.e-post-avatar .e-post-date {
+    display: block;
+  }
+  
+  .col.e-post-message {
+    padding-right: 105px;
+  }
+
+  .e-post-vote {
+    width: 18px;
+  }
+
+  .e-avatar.middle {
+    width: 32px;
+    height: 32px;
+  }
+
+  .col.e-post-question {
+    padding-right: 60px;
+  }
+
+  .excelsior .e-post-btn {
+    padding-left: 0;
+    padding-right: 0;
+    text-align: center;
+    width: 140px;
+  }
+
+  .e-panel .pagination {
+    border: 0;
+  }
+
+  .e-post-feedback .e-post-feedback-btn {
+    margin: 6px 6px 0 0;
+  }
+
+  .e-homepage-panel {
+    margin: 15px;
+  }
+}
+
+@media screen 
+and (min-device-width : 320px) 
+and (max-device-width : 480px) 
+and (orientation : landscape) {
+  .e-list-review-count,
+  .e-list-question-count,
+  .e-list-separator  {
+    display: inline;
+  }
+}
+/* product-list end */
+
+/*review star rating tooltip*/
+.productResultsList .mlist-listItem .ui-grid-a,
+.productResultsList .mlist-listItem .ui-link-inherit{
+  overflow: visible !important;
+}
+/*end of review star rating tooltip*/

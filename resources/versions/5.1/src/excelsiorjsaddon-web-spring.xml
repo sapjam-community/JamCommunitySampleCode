@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ [y] hybris Platform
+
+ Copyright (c) 2000-2014 hybris AG
+ All rights reserved.
+
+ This software is the confidential and proprietary information of hybris
+ ("Confidential Information"). You shall not disclose such Confidential
+ Information and shall use it only in accordance with the terms of the
+ license agreement you entered into with hybris.
+-->
+
+
+<!-- 
+  WARNING: This is the Spring WEB configuration file. If you want to replace
+  items or managers you have to do this from the extensions core configuration 
+  file (excelsiorjsaddon/resources/excelsiorjsaddon-spring.xml) 
+  -->
+
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop" xmlns:context="http://www.springframework.org/schema/context" xsi:schemaLocation="http://www.springframework.org/schema/beans
+           http://www.springframework.org/schema/beans/spring-beans.xsd
+           http://www.springframework.org/schema/aop
+           http://www.springframework.org/schema/aop/spring-aop.xsd
+           http://www.springframework.org/schema/context
+           http://www.springframework.org/schema/context/spring-context.xsd">
+
+  <context:annotation-config/>
+  <context:component-scan base-package="com.sap.social.addons.excelsior.controllers"/>
+  <!-- 
+   Registering the hybris "tenant" scope 
+   This is the custom hybris scope that manages the lifetime of a "tenant". 
+   If you do not deal with tenants ("multimandantenfähigkeit"), then there 
+   is no need to understand what this is for.  
+   -->
+  
+  <bean class="org.springframework.beans.factory.config.CustomScopeConfigurer">
+        <property name="scopes">
+            <map>
+                <entry key="tenant" value="de.hybris.platform.spring.TenantScope"/>
+            </map>
+        </property>
+    </bean>
+    
+  <!--  Configure the class to use for jalo session creation -->
+  <!-- <bean id="jalosession"   class="de.hybris.platform.jalo.JaloSessionFactory">
+    <property name="targetClassName" value="com.sap.social.addons.excelsior.jalo.ExcelsiorjsaddonJaloSession"/>
+  </bean>-->
+
+  <!-- Spring managed FilterChain for hybris Filter stack -->
+  <bean id="excelsiorjsaddonPlatformFilterChain" class="de.hybris.platform.servicelayer.web.PlatformFilterChain">
+    <constructor-arg>
+      <list>
+        <ref bean="log4jFilter"/>
+        <ref bean="dynamicTenantActivationFilter"/>
+        <ref bean="sessionFilter"/>
+            <ref bean="excelsiorjsaddonSecureMediaFilter"/>       
+      </list>
+    </constructor-arg>
+  </bean>
+ 
+   <bean id="excelsiorjsaddonSecureMediaFilter" class="de.hybris.platform.servicelayer.web.SecureMediaFilter">
+       <property name="mediaPermissionService" ref="mediaPermissionService"/>
+       <property name="modelService" ref="modelService"/>
+       <property name="userService" ref="userService"/>
+       <property name="mediaService" ref="mediaService"/>
+      <!-- <property name="secureMediaToken" value="securemedias"/>  securemedias is default but you may overwrite it -->
+       <aop:scoped-proxy/>
+     </bean>  
+
+  <!-- 
+   WARNING: 
+   Do NOT override hybris managers or items within the web module!
+   Use always the core spring configuration file (excelsiorjsaddon-spring.xml) in
+   the extensions resources/ directory.
+   -->
+      <!--renderers' definition here -->
+      <bean id="addOnJspIncludeCMSComponentRenderer"
+        class="de.hybris.platform.addonsupport.renderer.impl.DefaultAddOnCMSComponentRenderer">
+        <property name="typeService" ref="typeService" />
+        <property name="uiExperienceService" ref="uiExperienceService" />
+      </bean>
+
+      <bean id="excelsiorComponentBaseRender" parent="addOnJspIncludeCMSComponentRenderer" class="com.sap.social.addons.excelsior.component.renderer.ExcelsiorComponentBaseRender"></bean>
+      <bean id="excelsiorHomePageParagraphComponentRenderer" parent="excelsiorComponentBaseRender" class="com.sap.social.addons.excelsior.component.renderer.ExcelsiorHomePageParagraphComponentRenderer">
+          <property name="userService" ref="userService" />
+          <property name="productService" ref="productService" />
+      </bean>
+      <bean id="excelsiorQAParagraphComponentRenderer" parent="excelsiorComponentBaseRender" class="com.sap.social.addons.excelsior.component.renderer.ExcelsiorQAParagraphComponentRenderer">
+          <property name="userService" ref="userService" />
+          <property name="productService" ref="productService" />
+      </bean>
+      <bean id="excelsiorQATabParagraphComponentRenderer" parent="excelsiorComponentBaseRender" class="com.sap.social.addons.excelsior.component.renderer.ExcelsiorQATabParagraphComponentRenderer">
+      </bean>
+      <bean id="excelsiorReviewTabParagraphComponentRenderer" parent="excelsiorComponentBaseRender" class="com.sap.social.addons.excelsior.component.renderer.ExcelsiorReviewTabParagraphComponentRenderer">
+      </bean>
+      <bean id="excelsiorBlogTabParagraphComponentRenderer" parent="excelsiorComponentBaseRender" class="com.sap.social.addons.excelsior.component.renderer.ExcelsiorBlogTabParagraphComponentRenderer">
+      </bean>
+      <bean id="excelsiorDiscussionTabParagraphComponentRenderer" parent="excelsiorComponentBaseRender" class="com.sap.social.addons.excelsior.component.renderer.ExcelsiorDiscussionTabParagraphComponentRenderer">
+      </bean>
+      <bean id="excelsiorProductListComponentRenderer" parent="excelsiorComponentBaseRender" class="com.sap.social.addons.excelsior.component.renderer.ExcelsiorProductListComponentRenderer">
+          <property name="userService" ref="userService" />
+          <property name="productService" ref="productService" />
+      </bean>
+
+      <!--renderer mapping -->
+      <bean id="defaultCMSComponentRendererRegistry" class="de.hybris.platform.acceleratorcms.component.renderer.impl.DefaultCMSComponentRendererRegistry" >
+        <property name="typeService" ref="typeService"/>
+        <property name="defaultCmsComponentRenderer" ref="genericViewCMSComponentRenderer"/>
+        <property name="renderers">
+          <map merge="true">
+            <entry key="CMSParagraphComponent" value-ref="cmsParagraphComponentRenderer"/>
+            <entry key="CMSLinkComponent" value-ref="cmsLinkComponentRenderer"/>
+          </map>
+        </property>
+      </bean>
+<!--
+  <alias name="defaultCMSLinkComponentRenderer" alias="cmsLinkComponentRenderer"/>
+  <bean id="defaultCMSLinkComponentRenderer" class="de.hybris.platform.yacceleratorstorefront.renderer.CMSLinkComponentRenderer" >
+    <property name="categoryUrlConverter" ref="categoryUrlConverter"/>
+    <property name="productUrlConverter" ref="productUrlConverter"/>
+  </bean>
+
+  <alias alias="cmsComponentRendererRegistry" name="acceleratorCMSComponentRendererRegistry" />
+  <bean id="acceleratorCMSComponentRendererRegistry" parent="defaultCMSComponentRendererRegistry">
+    <property name="renderers">
+      <map merge="true">
+        <entry key="CMSLinkComponent" value-ref="cmsLinkComponentRenderer"/>
+      </map>
+    </property>
+  </bean>
+-->
+      <alias name="addonCMSComponentRendererRegistry" alias="cmsComponentRendererRegistry" />
+      <bean id="addonCMSComponentRendererRegistry"
+        class="com.sap.social.addons.excelsior.component.renderer.AddOnCMSComponentRendererRegistry"
+        parent="defaultCMSComponentRendererRegistry" />
+
+      <bean id="addonCmsComponentRendererMapping"
+        class="com.sap.social.addons.excelsior.component.renderer.AddOnCMSComponentRendererMapping" abstract="true" />
+
+
+      <bean id="excelsiorHomePageParagraphComponentRendererMapping" parent="addonCmsComponentRendererMapping">
+          <property name="typeCode" value="ExcelsiorHomePageParagraphComponent" />
+          <property name="renderer" ref="excelsiorHomePageParagraphComponentRenderer" />
+      </bean>
+      <bean id="excelsiorQAParagraphComponentRendererMapping" parent="addonCmsComponentRendererMapping">
+          <property name="typeCode" value="ExcelsiorQAParagraphComponent" />
+          <property name="renderer" ref="excelsiorQAParagraphComponentRenderer" />
+      </bean>
+      <bean id="excelsiorQATabParagraphComponentRendererMapping" parent="addonCmsComponentRendererMapping">
+          <property name="typeCode" value="ExcelsiorQATabParagraphComponent" />
+          <property name="renderer" ref="excelsiorQATabParagraphComponentRenderer" />
+      </bean>
+      <bean id="excelsiorReviewTabParagraphComponentRendererMapping" parent="addonCmsComponentRendererMapping">
+          <property name="typeCode" value="ExcelsiorReviewTabParagraphComponent" />
+          <property name="renderer" ref="excelsiorReviewTabParagraphComponentRenderer" />
+      </bean>
+      <bean id="excelsiorBlogTabParagraphComponentRendererMapping" parent="addonCmsComponentRendererMapping">
+          <property name="typeCode" value="ExcelsiorBlogTabParagraphComponent" />
+          <property name="renderer" ref="excelsiorBlogTabParagraphComponentRenderer" />
+      </bean>
+      <bean id="excelsiorDiscussionTabParagraphComponentRendererMapping" parent="addonCmsComponentRendererMapping">
+          <property name="typeCode" value="ExcelsiorDiscussionTabParagraphComponent" />
+          <property name="renderer" ref="excelsiorDiscussionTabParagraphComponentRenderer" />
+      </bean>
+      <bean id="excelsiorProductListComponentRendererMapping" parent="addonCmsComponentRendererMapping">
+          <property name="typeCode" value="ExcelsiorProductListComponent" />
+          <property name="renderer" ref="excelsiorProductListComponentRenderer" />
+      </bean>
+</beans>

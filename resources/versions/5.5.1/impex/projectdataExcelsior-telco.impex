@@ -1,0 +1,95 @@
+$contentCatalog=b2ctelcoContentCatalog
+$contentCV=catalogVersion(CatalogVersion.catalog(Catalog.id[default=$contentCatalog]),CatalogVersion.version[default=Online])[default=$contentCatalog:Online]
+$community_site=https://telco.community-demo.sapjam.com 
+$community_slug=telco
+$hybris_prodCode=Apple_iPhone_6plus
+
+
+# Update PageTemplates
+INSERT_UPDATE PageTemplate;$contentCV[unique=true];uid[unique=true];name;frontendTemplateName;restrictedPageTypes(code);active[default=true]
+;;ProductDetailsPageTemplate;Product Details Page Template;"addon: excelsiorjsaddon/pages/product/productLayout3Page";ProductPage
+;;DeviceDetailsPageTemplate;Device Details Page Template;addon: excelsiorjsaddon/pages/product/deviceLayoutPage;ProductPage
+#;;PlanDetailsPageTemplate;Plan Details Page Template;addon: excelsiorjsaddon/pages/product/servicePlanLayoutPage;ProductPage
+#;;AddOnDetailsPageTemplate;Plan Details Page Template;addon: excelsiorjsaddon/pages/product/serviceAddOnLayoutPage;ProductPage
+;;AccessoryDetailsPageTemplate;Accessory Details Page Template;addon: excelsiorjsaddon/pages/product/accessoryLayoutPage;ProductPage
+;;SBGProductDetailsPageTemplate;SBG Product Details Page Template;addon: excelsiorjsaddon/pages/product/sbgProductLayoutPage;ProductPage
+
+# Content Slot Name
+INSERT_UPDATE ContentSlotName;name[unique=true];template(uid,$contentCV)[unique=true][default='ProductDetailsPageTemplate'];validComponentTypes(code);compTypeGroup(code)
+;Section2;;ExcelsiorQAParagraphComponent;wide
+;Tabs;;CMSTabParagraphContainer,ExcelsiorQATabParagraphComponent,ExcelsiorReviewTabParagraphComponent,ExcelsiorBlogTabParagraphComponent,ExcelsiorDiscussionTabParagraphComponent
+
+INSERT_UPDATE ContentSlotName;name[unique=true];template(uid,$contentCV)[unique=true][default='DeviceDetailsPageTemplate'];validComponentTypes(code);compTypeGroup(code)
+;ExcelsiorAddon;;ExcelsiorQAParagraphComponent
+;Tabs;;CMSTabParagraphContainer,ExcelsiorQATabParagraphComponent,ExcelsiorReviewTabParagraphComponent,ExcelsiorBlogTabParagraphComponent,ExcelsiorDiscussionTabParagraphComponent
+
+INSERT_UPDATE ContentSlotName;name[unique=true];template(uid,$contentCV)[unique=true][default='AccessoryDetailsPageTemplate'];validComponentTypes(code);compTypeGroup(code)
+;ExcelsiorAddon;;ExcelsiorQAParagraphComponent
+;Tabs;;CMSTabParagraphContainer,ExcelsiorQATabParagraphComponent,ExcelsiorReviewTabParagraphComponent,ExcelsiorBlogTabParagraphComponent,ExcelsiorDiscussionTabParagraphComponent
+
+INSERT_UPDATE ContentSlotName;name[unique=true];template(uid,$contentCV)[unique=true][default='SBGProductDetailsPageTemplate'];validComponentTypes(code);compTypeGroup(code)
+;ExcelsiorAddon;;ExcelsiorQAParagraphComponent
+;Tabs;;CMSTabParagraphContainer,ExcelsiorQATabParagraphComponent,ExcelsiorReviewTabParagraphComponent,ExcelsiorBlogTabParagraphComponent,ExcelsiorDiscussionTabParagraphComponent
+
+INSERT_UPDATE ContentSlotName;name[unique=true];template(uid,$contentCV)[unique=true][default='PlanDetailsPageTemplate'];validComponentTypes(code);compTypeGroup(code)
+;ExcelsiorAddonwithTab;;ExcelsiorQAParagraphComponent,ExcelsiorQATabParagraphComponent,ExcelsiorReviewTabParagraphComponent,ExcelsiorBlogTabParagraphComponent,ExcelsiorDiscussionTabParagraphComponent
+
+INSERT_UPDATE ContentSlotName;name[unique=true];template(uid,$contentCV)[unique=true][default='AddOnDetailsPageTemplate'];validComponentTypes(code);compTypeGroup(code)
+;ExcelsiorAddonwithTab;;ExcelsiorQAParagraphComponent,ExcelsiorQATabParagraphComponent,ExcelsiorReviewTabParagraphComponent,ExcelsiorBlogTabParagraphComponent,ExcelsiorDiscussionTabParagraphComponent
+
+# Landing Page Templates
+INSERT_UPDATE ContentSlotName;name[unique=true];template(uid,$contentCV)[unique=true][default='LandingPage2Template'];validComponentTypes(code);compTypeGroup(code)
+;Section3;;ExcelsiorHomePageParagraphComponent;wide
+
+#Content Slot
+INSERT_UPDATE ContentSlot;$contentCV[unique=true];uid[unique=true];name;active
+;;ExcelsiorAddonSlot;Excelsior Addon Slot;true
+
+INSERT_UPDATE ContentSlot;$contentCV[unique=true];uid[unique=true];name;active
+;;ExcelsiorAddonwithTabSlot;Excelsior Addon with Tab Slot;true
+
+#Content Slot for Template
+INSERT_UPDATE ContentSlotForTemplate;$contentCV[unique=true];uid[unique=true];position[unique=true];pageTemplate(uid,$contentCV)[unique=true][default='DeviceDetailsPageTemplate'];contentSlot(uid,$contentCV)[unique=true];allowOverwrite
+;;ExcelsiorAddonSlot-deviceDetailT;ExcelsiorAddon;;ExcelsiorAddonSlot;true
+
+INSERT_UPDATE ContentSlotForTemplate;$contentCV[unique=true];uid[unique=true];position[unique=true];pageTemplate(uid,$contentCV)[unique=true][default='AccessoryDetailsPageTemplate'];contentSlot(uid,$contentCV)[unique=true];allowOverwrite
+;;ExcelsiorAddonSlot-accessoryDetailT;ExcelsiorAddon;;ExcelsiorAddonSlot;true
+
+INSERT_UPDATE ContentSlotForTemplate;$contentCV[unique=true];uid[unique=true];position[unique=true];pageTemplate(uid,$contentCV)[unique=true][default='SBGProductDetailsPageTemplate'];contentSlot(uid,$contentCV)[unique=true];allowOverwrite
+;;ExcelsiorAddonSlot-sbgProductDetailT;ExcelsiorAddon;;ExcelsiorAddonSlot;true
+
+#INSERT_UPDATE ContentSlotForTemplate;$contentCV[unique=true];uid[unique=true];position[unique=true];pageTemplate(uid,$contentCV)[unique=true][default='AddOnDetailsPageTemplate'];contentSlot(uid,$contentCV)[unique=true];allowOverwrite
+#;;ExcelsiorAddonwithTabSlot-addonDetailT;ExcelsiorAddonwithTab;;ExcelsiorAddonwithTabSlot;true
+
+#INSERT_UPDATE ContentSlotForTemplate;$contentCV[unique=true];uid[unique=true];position[unique=true];pageTemplate(uid,$contentCV)[unique=true][default='PlanDetailsPageTemplate'];contentSlot(uid,$contentCV)[unique=true];allowOverwrite
+#;;ExcelsiorAddonwithTabSlot-planDetailT;ExcelsiorAddonwithTab;;ExcelsiorAddonwithTabSlot;true
+
+# Excelsior Components
+INSERT_UPDATE ExcelsiorQAParagraphComponent;$contentCV[unique=true];uid[unique=true];name;visible;&componentRef;server;network
+;;ExcelsiorQAParagraphComponent;"Excelsior QA Paragraph Component";true;ExcelsiorQAParagraphComponent;$community_site;$community_slug
+
+INSERT_UPDATE ExcelsiorQATabParagraphComponent;$contentCV[unique=true];uid[unique=true];name;visible;&componentRef;server;network
+;;ExcelsiorQATabParagraphComponent;"Excelsior QA Tab Paragraph Component";true;ExcelsiorQATabParagraphComponent;$community_site;$community_slug
+
+INSERT_UPDATE ExcelsiorReviewTabParagraphComponent;$contentCV[unique=true];uid[unique=true];name;visible;&componentRef;server;network
+;;ExcelsiorReviewTabParagraphComponent;"Excelsior Review Tab Paragraph Component";true;ExcelsiorReviewTabParagraphComponent;$community_site;$community_slug
+
+INSERT_UPDATE ExcelsiorBlogTabParagraphComponent;$contentCV[unique=true];uid[unique=true];name;visible;&componentRef;server;network
+;;ExcelsiorBlogTabParagraphComponent;"Excelsior Blog Tab Paragraph Component";true;ExcelsiorBlogTabParagraphComponent;$community_site;$community_slug
+
+INSERT_UPDATE ExcelsiorDiscussionTabParagraphComponent;$contentCV[unique=true];uid[unique=true];name;visible;&componentRef;server;network
+;;ExcelsiorDiscussionTabParagraphComponent;"Excelsior Discussion Tab Paragraph Component";true;ExcelsiorDiscussionTabParagraphComponent;$community_site;$community_slug
+
+INSERT_UPDATE ExcelsiorHomePageParagraphComponent;$contentCV[unique=true];uid[unique=true];name;visible;&componentRef;server;prodCode;network
+;;ExcelsiorHomePageParagraphComponent;"Excelsior HomePage Paragraph Component";true;ExcelsiorHomePageParagraphComponent;$community_site;$hybris_prodCode;$community_slug
+
+################ Put Component in page #####################
+UPDATE CMSTabParagraphContainer;$contentCV[unique=true];uid[unique=true];name;visible;simpleCMSComponents(uid,$contentCV);&componentRef
+;;TabPanelContainer;Tab container;true;deliveryTab;TabPanelContainer
+
+#Update Content Slot
+INSERT_UPDATE ContentSlot;$contentCV[unique=true];uid[unique=true];cmsComponents(&componentRef)
+;;ExcelsiorAddonSlot;ExcelsiorQAParagraphComponent
+#;;ExcelsiorAddonwithTabSlot;ExcelsiorQAParagraphComponent,ExcelsiorQATabParagraphComponent,ExcelsiorReviewTabParagraphComponent
+;;TabsSlot;TabPanelContainer,ExcelsiorQATabParagraphComponent,ExcelsiorReviewTabParagraphComponent,ExcelsiorBlogTabParagraphComponent,ExcelsiorDiscussionTabParagraphComponent
+;;Section2;ExcelsiorQAParagraphComponent

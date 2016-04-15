@@ -1,0 +1,32 @@
+$contentCatalog=electronicsContentCatalog
+$contentCV=catalogVersion(CatalogVersion.catalog(Catalog.id[default=$contentCatalog]),CatalogVersion.version[default=Online])[default=$contentCatalog:Online]
+
+#Update PageTemplates
+INSERT_UPDATE PageTemplate;$contentCV[unique=true];uid[unique=true];name;frontendTemplateName;restrictedPageTypes(code);active[default=true]
+;;MobileProductDetailsPageTemplate;Mobile Product Details Page Template;"addon: excelsiorjsaddon/pages/product/productLayout2Page";ProductPage
+
+# Update Valid Component
+# Product Details Page Template
+INSERT_UPDATE ContentSlotName;name[unique=true];template(uid,$contentCV)[unique=true][default='MobileProductDetailsPageTemplate'];validComponentTypes(code);compTypeGroup(code)
+;Section2;;ExcelsiorQAParagraphComponent;mobile
+;Tabs;;CMSTabParagraphContainer,ExcelsiorQATabParagraphComponent,ExcelsiorReviewTabParagraphComponent
+
+# Product List Page Template
+INSERT_UPDATE ContentSlotName;name[unique=true];template(uid,$contentCV)[unique=true][default='MobileProductListPageTemplate'];validComponentTypes(code);compTypeGroup(code)
+;ProductListSlot;;ExcelsiorProductListComponent,ExcelsiorProductGridComponent;mobile
+
+# Product Grid Page Template
+INSERT_UPDATE ContentSlotName;name[unique=true];template(uid,$contentCV)[unique=true][default='MobileProductGridPageTemplate'];validComponentTypes(code);compTypeGroup(code)
+;ProductGridSlot;;ExcelsiorProductListComponent,ExcelsiorProductGridComponent;mobile
+
+# Search Results List Page Template
+INSERT_UPDATE ContentSlotName;name[unique=true];template(uid,$contentCV)[unique=true][default='MobileSearchResultsListPageTemplate'];validComponentTypes(code);compTypeGroup(code)
+;SearchResultsListSlot;;ExcelsiorProductListComponent,ExcelsiorProductGridComponent;mobile
+
+# Search Results Grid Page Template
+INSERT_UPDATE ContentSlotName;name[unique=true];template(uid,$contentCV)[unique=true][default='MobileSearchResultsGridPageTemplate'];validComponentTypes(code);compTypeGroup(code)
+;SearchResultsGridSlot;;ExcelsiorProductListComponent,ExcelsiorProductGridComponent;mobile
+
+# Landing Page Templates
+INSERT_UPDATE ContentSlotName;name[unique=true];template(uid,$contentCV)[unique=true][default='MobileLandingPageTemplate'];validComponentTypes(code);compTypeGroup(code)
+;Section3;;ExcelsiorHomePageParagraphComponent;mobile

@@ -1,0 +1,100 @@
+$contentCatalog=electronicsContentCatalog
+$contentCV=catalogVersion(CatalogVersion.catalog(Catalog.id[default=$contentCatalog]),CatalogVersion.version[default=Online])[default=$contentCatalog:Online]
+$community_site= 
+$community_slug= 
+$hybris_prodCode= 
+
+############### Desktop Page ###############
+#Update PageTemplates
+INSERT_UPDATE PageTemplate;$contentCV[unique=true];uid[unique=true];name;frontendTemplateName;restrictedPageTypes(code);active[default=true]
+;;ProductDetailsPageTemplate;Product Details Page Template;"addon: excelsiorjsaddon/pages/product/productLayout3Page";ProductPage
+
+# Update Valid Component
+# Product Details Page Template
+INSERT_UPDATE ContentSlotName;name[unique=true];template(uid,$contentCV)[unique=true][default='ProductDetailsPageTemplate'];validComponentTypes(code);compTypeGroup(code)
+;Section2;;ExcelsiorQAParagraphComponent;wide
+;Tabs;;CMSTabParagraphContainer,ExcelsiorQATabParagraphComponent,ExcelsiorReviewTabParagraphComponent,ExcelsiorBlogTabParagraphComponent,ExcelsiorDiscussionTabParagraphComponent
+
+# Product List Page Template
+INSERT_UPDATE ContentSlotName;name[unique=true];template(uid,$contentCV)[unique=true][default='ProductListPageTemplate'];validComponentTypes(code);compTypeGroup(code)
+;ProductListSlot;;ExcelsiorProductListComponent,ExcelsiorProductGridComponent;wide
+
+# Product Grid Page Template
+INSERT_UPDATE ContentSlotName;name[unique=true];template(uid,$contentCV)[unique=true][default='ProductGridPageTemplate'];validComponentTypes(code);compTypeGroup(code)
+;ProductGridSlot;;ExcelsiorProductListComponent,ExcelsiorProductGridComponent;wide
+
+# Search Results List Page Template
+INSERT_UPDATE ContentSlotName;name[unique=true];template(uid,$contentCV)[unique=true][default='SearchResultsListPageTemplate'];validComponentTypes(code);compTypeGroup(code)
+;SearchResultsListSlot;;ExcelsiorProductListComponent,ExcelsiorProductGridComponent;wide
+
+# Search Results Grid Page Template
+INSERT_UPDATE ContentSlotName;name[unique=true];template(uid,$contentCV)[unique=true][default='SearchResultsGridPageTemplate'];validComponentTypes(code);compTypeGroup(code)
+;SearchResultsGridSlot;;ExcelsiorProductListComponent,ExcelsiorProductGridComponent;wide
+
+# Landing Page Templates
+INSERT_UPDATE ContentSlotName;name[unique=true];template(uid,$contentCV)[unique=true][default='LandingPage2Template'];validComponentTypes(code);compTypeGroup(code)
+;Section3;;ExcelsiorHomePageParagraphComponent;wide
+
+############### Mobile Page ###############
+#Update PageTemplates
+INSERT_UPDATE PageTemplate;$contentCV[unique=true];uid[unique=true];name;frontendTemplateName;restrictedPageTypes(code);active[default=true]
+;;MobileProductDetailsPageTemplate;Mobile Product Details Page Template;"addon: excelsiorjsaddon/pages/product/productLayout2Page";ProductPage
+
+# Update Valid Component
+# Product Details Page Template
+INSERT_UPDATE ContentSlotName;name[unique=true];template(uid,$contentCV)[unique=true][default='MobileProductDetailsPageTemplate'];validComponentTypes(code);compTypeGroup(code)
+;Section2;;ExcelsiorQAParagraphComponent;mobile
+;Tabs;;CMSTabParagraphContainer,ExcelsiorQATabParagraphComponent,ExcelsiorReviewTabParagraphComponent,ExcelsiorBlogTabParagraphComponent,ExcelsiorDiscussionTabParagraphComponent
+
+# Product List Page Template
+INSERT_UPDATE ContentSlotName;name[unique=true];template(uid,$contentCV)[unique=true][default='MobileProductListPageTemplate'];validComponentTypes(code);compTypeGroup(code)
+;ProductListSlot;;ExcelsiorProductListComponent,ExcelsiorProductGridComponent;mobile
+
+# Product Grid Page Template
+INSERT_UPDATE ContentSlotName;name[unique=true];template(uid,$contentCV)[unique=true][default='MobileProductGridPageTemplate'];validComponentTypes(code);compTypeGroup(code)
+;ProductGridSlot;;ExcelsiorProductListComponent,ExcelsiorProductGridComponent;mobile
+
+# Search Results List Page Template
+INSERT_UPDATE ContentSlotName;name[unique=true];template(uid,$contentCV)[unique=true][default='MobileSearchResultsListPageTemplate'];validComponentTypes(code);compTypeGroup(code)
+;SearchResultsListSlot;;ExcelsiorProductListComponent,ExcelsiorProductGridComponent;mobile
+
+# Search Results Grid Page Template
+INSERT_UPDATE ContentSlotName;name[unique=true];template(uid,$contentCV)[unique=true][default='MobileSearchResultsGridPageTemplate'];validComponentTypes(code);compTypeGroup(code)
+;SearchResultsGridSlot;;ExcelsiorProductListComponent,ExcelsiorProductGridComponent;mobile
+
+# Landing Page Templates
+INSERT_UPDATE ContentSlotName;name[unique=true];template(uid,$contentCV)[unique=true][default='MobileLandingPageTemplate'];validComponentTypes(code);compTypeGroup(code)
+;Section3;;ExcelsiorHomePageParagraphComponent;mobile
+
+
+############### Component ###############
+# Excelsior components
+INSERT_UPDATE ExcelsiorQAParagraphComponent;$contentCV[unique=true];uid[unique=true];name;visible;&componentRef;server;network
+;;ExcelsiorQAParagraphComponent;"Excelsior QA Paragraph Component";true;ExcelsiorQAParagraphComponent;$community_site;$community_slug
+
+INSERT_UPDATE ExcelsiorQATabParagraphComponent;$contentCV[unique=true];uid[unique=true];name;visible;&componentRef;server;network
+;;ExcelsiorQATabParagraphComponent;"Excelsior QA Tab Paragraph Component";true;ExcelsiorQATabParagraphComponent;$community_site;$community_slug
+
+INSERT_UPDATE ExcelsiorReviewTabParagraphComponent;$contentCV[unique=true];uid[unique=true];name;visible;&componentRef;server;network
+;;ExcelsiorReviewTabParagraphComponent;"Excelsior Review Tab Paragraph Component";true;ExcelsiorReviewTabParagraphComponent;$community_site;$community_slug
+
+INSERT_UPDATE ExcelsiorBlogTabParagraphComponent;$contentCV[unique=true];uid[unique=true];name;visible;&componentRef;server;network
+;;ExcelsiorBlogTabParagraphComponent;"Excelsior Blog Tab Paragraph Component";true;ExcelsiorBlogTabParagraphComponent;$community_site;$community_slug
+
+INSERT_UPDATE ExcelsiorDiscussionTabParagraphComponent;$contentCV[unique=true];uid[unique=true];name;visible;&componentRef;server;network
+;;ExcelsiorDiscussionTabParagraphComponent;"Excelsior Discussion Tab Paragraph Component";true;ExcelsiorDiscussionTabParagraphComponent;$community_site;$community_slug
+
+INSERT_UPDATE ExcelsiorProductListComponent;$contentCV[unique=true];uid[unique=true];name;visible;actions(uid,$contentCV);&componentRef;server;network
+;;ExcelsiorSearchResultsList;Excelsior Search Result List Component;true;ListPickUpInStoreAction,ListAddToCartAction;ExcelsiorSearchResultsList;$community_site;$community_slug
+
+INSERT_UPDATE ExcelsiorProductListComponent;$contentCV[unique=true];uid[unique=true];name;visible;actions(uid,$contentCV);&componentRef;server;network
+;;ExcelsiorProductList;Excelsior Product List Component;true;ListPickUpInStoreAction,ListAddToCartAction;ExcelsiorProductList;$community_site;$community_slug
+
+INSERT_UPDATE ExcelsiorProductGridComponent;$contentCV[unique=true];uid[unique=true];name;visible;actions(uid,$contentCV);&componentRef;server;network
+;;ExcelsiorSearchResultsGrid;Excelsior Search Result Grid Component;true;ListPickUpInStoreAction,ListAddToCartAction;ExcelsiorSearchResultsGrid;$community_site;$community_slug
+
+INSERT_UPDATE ExcelsiorProductGridComponent;$contentCV[unique=true];uid[unique=true];name;visible;actions(uid,$contentCV);&componentRef;server;network
+;;ExcelsiorProductGrid;Excelsior Product Grid Component;true;ListPickUpInStoreAction,ListAddToCartAction;ExcelsiorProductGrid;$community_site;$community_slug
+
+INSERT_UPDATE ExcelsiorHomePageParagraphComponent;$contentCV[unique=true];uid[unique=true];name;visible;&componentRef;server;prodCode;network
+;;ExcelsiorHomePageParagraphComponent;"Excelsior HomePage Paragraph Component";true;ExcelsiorHomePageParagraphComponent;$community_site;$hybris_prodCode;$community_slug

@@ -1,0 +1,74 @@
+# -----------------------------------------------------------------------
+# [y] hybris Platform 
+# 
+# Copyright (c) 2000-2015 hybris AG
+# All rights reserved.
+#  
+# This software is the confidential and proprietary information of hybris 
+# ("Confidential Information"). You shall not disclose such Confidential
+# Information and shall use it only in accordance with the terms of the
+# license agreement you entered into with hybris.
+#
+#  
+# -----------------------------------------------------------------------
+
+# you can put key/value pairs here.
+# Use Config.getParameter(..) to retrieve the values during runtime.
+
+excelsiorjsaddon.key=value
+
+# Specifies the location of the spring context file added automatically to the global platform application context.
+excelsiorjsaddon.application-context=excelsiorjsaddon-spring.xml
+
+yacceleratorstorefront.additionalWebSpringConfigs.excelsiorjsaddon=classpath:/excelsiorjsaddon/web/spring/excelsiorjsaddon-web-spring.xml
+yb2bacceleratorstorefront.additionalWebSpringConfigs.excelsiorjsaddon=classpath:/excelsiorjsaddon/web/spring/excelsiorjsaddon-web-spring.xml
+
+storefront.supportedUiExperienceLevels.electronics=DESKTOP,MOBILE
+storefront.supportedUiExperienceLevels.apparel-uk=DESKTOP,MOBILE
+storefront.supportedUiExperienceLevels.apparel-de=DESKTOP,MOBILE
+storefront.supportedUiExperienceLevels.powertools=DESKTOP
+
+
+excelsiorjsaddon.css.paths.desktop=/desktop/common/css/excelsiorjsaddon.css
+excelsiorjsaddon.css.paths.mobile=/mobile/common/css/excelsiorjsaddon.css
+excelsiorjsaddon.css.paths.responsive=/responsive/common/css/excelsiorjsaddon.css
+
+
+
+#productCode, community network and url can also be configured   # 
+#as component attributes in hybris hmc. If not configured in     #
+#component, values set in this file will be read and used.       #
+#
+############hybris homepage component product code################
+#
+# hybrisSiteName.homepage.component.productCode=
+#
+############hybris website <-> community network mapping##########
+#
+# hybrisSiteName.community.network = communityNetworkName
+#
+############community network information  #######################
+# community.communityNetworkName.url=
+# community.communityNetworkName.token.username=
+# community.communityNetworkName.token.password=
+# community.communityNetworkName.application.id=
+# community.communityNetworkName.secret.id=
+#
+#example: 
+#       electronics.homepage.component.productCode=1934793
+#       electronics.community.network=nike
+#       community.nike.url=https://sapnike.community.com
+#       community.nike.token.username=admin
+#       community.nike.token.password=password
+#       community.nike.application.id=4321rewq432fdgiopj
+#       community.nike.secret.id=31312efdsafjdsoipvji
+#
+##################################################################
+
+#proxy settings
+#http.host=proxy.wdf.sap.corp
+#http.port=8080
+#https.host=proxy.wdf.sap.corp
+#https.port=8080
+
+responsive=off

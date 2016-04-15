@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+    <!--
+ [y] hybris Platform
+
+ Copyright (c) 2000-2015 hybris AG
+ All rights reserved.
+
+ This software is the confidential and proprietary information of hybris
+ ("Confidential Information"). You shall not disclose such Confidential
+ Information and shall use it only in accordance with the terms of the
+ license agreement you entered into with hybris.
+-->
+    <beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop" xmlns:context="http://www.springframework.org/schema/context" xsi:schemaLocation="http://www.springframework.org/schema/beans
+           http://www.springframework.org/schema/beans/spring-beans.xsd
+           http://www.springframework.org/schema/aop
+           http://www.springframework.org/schema/aop/spring-aop.xsd
+           http://www.springframework.org/schema/context
+           http://www.springframework.org/schema/context/spring-context.xsd">
+        <context:annotation-config/>
+
+        <context:component-scan base-package="com.sap.social.addons.excelsior.controllers"/>
+        <!-- Expose /acceleratoraddon/web/webroot/WEB-INF/messages/base.js.properties  resource bundle as javascript variables -->
+        <bean id="defaultExcelsiorjsaddonJavaScriptMessageResourceAccessor" parent="abstractJavaScriptMessageResourceAccessor">
+            <property name="addOnName" value="excelsiorjsaddon" />
+        </bean>
+        <bean id="defaultExcelsiorjsaddonBeforeViewJsPropsHandlerAdaptee" parent="abstractBeforeViewJsPropsHandlerAdaptee" class="de.hybris.platform.addonsupport.interceptors.ExportJsPropertiesBeforeViewHandler">
+            <property name="messageSource" ref="defaultExcelsiorjsaddonJavaScriptMessageResourceAccessor" />
+        </bean>
+        <bean id="getExcelsiorjsaddonBeforeViewHandler" parent="beforeViewHandlerAdapter">
+            <property name="adaptee">
+                <ref bean="defaultExcelsiorjsaddonBeforeViewJsPropsHandlerAdaptee" />
+            </property>
+        </bean>
+        <bean id="ExcelsiorjsaddonBeforeViewHandlerListMergeDirective" depends-on="beforeViewHandlersList" parent="listMergeDirective">
+            <property name="add" ref="getExcelsiorjsaddonBeforeViewHandler" />
+        </bean>
+        <!--renderers' definition here -->
+        <bean id="excelsiorComponentBaseRender" parent="addOnJspIncludeCMSComponentRenderer" class="com.sap.social.addons.excelsior.component.renderer.ExcelsiorComponentBaseRender">
+        	<property name="cmsSiteService" ref="cmsSiteService"/>
+        </bean>
+        <bean id="excelsiorHomePageParagraphComponentRenderer" parent="excelsiorComponentBaseRender" class="com.sap.social.addons.excelsior.component.renderer.ExcelsiorHomePageParagraphComponentRenderer">
+        </bean>
+        <bean id="excelsiorQAParagraphComponentRenderer" parent="excelsiorComponentBaseRender" class="com.sap.social.addons.excelsior.component.renderer.ExcelsiorQAParagraphComponentRenderer">
+            <property name="userService" ref="userService" />
+        </bean>
+        <bean id="excelsiorQATabParagraphComponentRenderer" parent="excelsiorComponentBaseRender" class="com.sap.social.addons.excelsior.component.renderer.ExcelsiorQATabParagraphComponentRenderer">
+        </bean>
+        <bean id="excelsiorReviewTabParagraphComponentRenderer" parent="excelsiorComponentBaseRender" class="com.sap.social.addons.excelsior.component.renderer.ExcelsiorReviewTabParagraphComponentRenderer">
+        </bean>
+        <bean id="excelsiorBlogTabParagraphComponentRenderer" parent="excelsiorComponentBaseRender" class="com.sap.social.addons.excelsior.component.renderer.ExcelsiorBlogTabParagraphComponentRenderer">
+        </bean>
+        <bean id="excelsiorDiscussionTabParagraphComponentRenderer" parent="excelsiorComponentBaseRender" class="com.sap.social.addons.excelsior.component.renderer.ExcelsiorDiscussionTabParagraphComponentRenderer">
+        </bean>
+        <bean id="excelsiorProductListComponentRenderer" parent="excelsiorComponentBaseRender" class="com.sap.social.addons.excelsior.component.renderer.ExcelsiorProductListComponentRenderer">
+        </bean>
+        <bean id="excelsiorProductGridComponentRenderer" parent="excelsiorComponentBaseRender" class="com.sap.social.addons.excelsior.component.renderer.ExcelsiorProductGridComponentRenderer">
+        </bean>
+        <!--renderer mapping -->
+        <bean id="excelsiorHomePageParagraphComponentRendererMapping" parent="addonCmsComponentRendererMapping">
+            <property name="typeCode" value="ExcelsiorHomePageParagraphComponent" />
+            <property name="renderer" ref="excelsiorHomePageParagraphComponentRenderer" />
+        </bean>
+        <bean id="excelsiorQAParagraphComponentRendererMapping" parent="addonCmsComponentRendererMapping">
+            <property name="typeCode" value="ExcelsiorQAParagraphComponent" />
+            <property name="renderer" ref="excelsiorQAParagraphComponentRenderer" />
+        </bean>
+        <bean id="excelsiorQATabParagraphComponentRendererMapping" parent="addonCmsComponentRendererMapping">
+            <property name="typeCode" value="ExcelsiorQATabParagraphComponent" />
+            <property name="renderer" ref="excelsiorQATabParagraphComponentRenderer" />
+        </bean>
+        <bean id="excelsiorReviewTabParagraphComponentRendererMapping" parent="addonCmsComponentRendererMapping">
+            <property name="typeCode" value="ExcelsiorReviewTabParagraphComponent" />
+            <property name="renderer" ref="excelsiorReviewTabParagraphComponentRenderer" />
+        </bean>
+        <bean id="excelsiorBlogTabParagraphComponentRendererMapping" parent="addonCmsComponentRendererMapping">
+            <property name="typeCode" value="ExcelsiorBlogTabParagraphComponent" />
+            <property name="renderer" ref="excelsiorBlogTabParagraphComponentRenderer" />
+        </bean>
+        <bean id="excelsiorDiscussionTabParagraphComponentRendererMapping" parent="addonCmsComponentRendererMapping">
+            <property name="typeCode" value="ExcelsiorDiscussionTabParagraphComponent" />
+            <property name="renderer" ref="excelsiorDiscussionTabParagraphComponentRenderer" />
+        </bean>
+        <bean id="excelsiorProductListComponentRendererMapping" parent="addonCmsComponentRendererMapping">
+            <property name="typeCode" value="ExcelsiorProductListComponent" />
+            <property name="renderer" ref="excelsiorProductListComponentRenderer" />
+        </bean>
+        <bean id="excelsiorProductGridComponentRendererMapping" parent="addonCmsComponentRendererMapping">
+            <property name="typeCode" value="ExcelsiorProductGridComponent" />
+            <property name="renderer" ref="excelsiorProductGridComponentRenderer" />
+        </bean>
+        
+        <bean id="excelsiorTokenBean" class="com.sap.social.addons.excelsior.token.bean.ExcelsiorTokenBean"/>
+        <bean id="versionNotifier" class="com.sap.social.addons.excelsior.versionNotifier.VersionNotifier" init-method="init" destroy-method="destroy" scope="singleton" lazy-init="false">
+        	<property name="excelsiorTokenBean" ref="excelsiorTokenBean"/>
+        </bean>
+    </beans>

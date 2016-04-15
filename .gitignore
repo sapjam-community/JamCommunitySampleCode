@@ -1,0 +1,11 @@
+classes/*
+gensrc/*
+platformhome.properties
+hmc/bin/*
+*.DS_Store
+*.class
+.idea/
+*.iml
+.metadata/
+velocity.log
+eclipsebin/
